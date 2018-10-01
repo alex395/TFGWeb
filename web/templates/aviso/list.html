@@ -14,17 +14,16 @@
     <!-- SU CONTENIDO VA AQUÍ -->
     <div>
       <br>
-          <h1><a href="/">Noticias</a></h1>
+          <h1><a href="/">Avisos</a></h1>
       </div>
 
-      {% for noticia in noticias %}
+      {% for aviso in avisos %}
           <div>
-            <h1>{{ noticia.titulo }}</h1>
-              <p>Autor: {{ noticia.autor }}</p>
-              <p>{{ noticia.descripcion|linebreaksbr }}</p>
-              <p>Publicado: {{ noticia.fecha}}</p>
-              <a class="btn btn-default" href="{% url 'noticiaEditar' pk=noticia.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
-
+            <h1>{{aviso.titulo }}</h1>
+              <p>{{aviso.descripcion|linebreaksbr }}</p>
+              <p>Prioridad: {{ aviso.prioridad}}</p>
+              <p>Fecha: {{ aviso.fecha}}</p>
+              <a class="btn btn-default" href="{% url 'avisoEditar' pk=aviso.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
           </div>
       {% endfor %}
   </div>
