@@ -36,5 +36,9 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=200)
     direccion = models.CharField(max_length=600)
 
+class Envio(models.Model):
+    titulo = models.CharField(max_length=200)
+    archivo = models.FileField(upload_to='archivos')
+
 def __str__(self):
     return self.title

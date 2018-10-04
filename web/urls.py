@@ -1,5 +1,5 @@
 from . import views
-from django.urls import path
+from django.urls import path, re_path
 
 urlpatterns = [
         path('', views.index),
@@ -8,6 +8,9 @@ urlpatterns = [
         path('aviso/list', views.avisoList),
         path('aviso/edit', views.avisoEdit),
         path('excel/actualizar', views.excelActualizar),
+        path('envio/list', views.envioList),
+        path('envio/edit', views.envioEdit),
+        re_path(r'^envio/(?P<path>.+)/envioDescargar/$', views.envioDescargar, name='envioDescargar'),
         path(r'^aviso/(?P<pk>[0-9]+)/edit/$', views.avisoEditar, name='avisoEditar'),
         path(r'^noticia/(?P<pk>[0-9]+)/edit/$', views.noticiaEditar, name='noticiaEditar'),
     ]

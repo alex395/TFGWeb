@@ -1,10 +1,14 @@
 from .models import Noticia
 from .forms import NoticiaForm
-from .models import Aviso
-from .forms import AvisoForm, ClienteForm
+from .models import Aviso, Cliente, Envio
+from .forms import AvisoForm, ClienteForm, EnvioForm
 from django.utils import timezone
 import xlrd
+import os
 from django.shortcuts import redirect, render, get_object_or_404
+from django.conf import settings
+from django.http import HttpResponse
+
 
 # Create your views here.
 def index(request):
@@ -71,6 +75,7 @@ def excelActualizar(request):
     myfile = request.FILES['file']
     book = xlrd.open_workbook(file_contents=myfile.read())
     sheet = book.sheet_by_name("Sheet1")
+    Cliente.objects.all().delete()
     for r in range(3, sheet.nrows):
         form = ClienteForm(request.POST)
         cliente = form.save(commit=False)
@@ -86,4 +91,26 @@ def excelActualizar(request):
         cliente.direccion = direccion
         cliente.save()
 
-    return redirect('/')
+def envioList(request):
+        envios = Envio.objects.all()
+        return render(request, 'envio/list.html', {'envios': envios})
+
+def envioEdit(request):
+        if request.method == "POST":
+            form = EnvioForm(request.POST, request.FILES)
+            if form.is_valid():
+                envio = form.save(commit=False)
+                envio.save()
+                return redirect('/')
+        else:
+            form = EnvioForm()
+        return render(request, 'envio/edit.html', {'form': form})
+
+def envioDescargar(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
