@@ -36,9 +36,18 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=200)
     direccion = models.CharField(max_length=600)
 
+class Peticion(models.Model):
+    titulo = models.CharField(max_length=200)
+    descripcion = models.CharField(max_length=200)
+    fechaEnvio = models.DateTimeField(default=timezone.now)
+    fechaLimite = models.DateTimeField()
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, null=True)
+
+
 class Envio(models.Model):
     titulo = models.CharField(max_length=200)
     archivo = models.FileField(upload_to='archivos')
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, null=True)
 
 def __str__(self):
     return self.title

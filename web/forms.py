@@ -1,7 +1,8 @@
 from django import forms
+from django.forms import ModelChoiceField
 from .models import Noticia
 from .models import Aviso
-from .models import Cliente, Envio
+from .models import Cliente, Envio, Peticion
 
 class NoticiaForm(forms.ModelForm):
 
@@ -15,11 +16,21 @@ class AvisoForm(forms.ModelForm):
       model = Aviso
       fields = ('titulo', 'descripcion', 'prioridad')
 
-class EnvioForm(forms.ModelForm):
+class ClienteModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s %s" % (obj.nombre,obj.apellidos)
 
+class EnvioForm(forms.ModelForm):
+     cliente = ClienteModelChoiceField(queryset=Cliente.objects.all())
      class Meta:
       model = Envio
-      fields = ('titulo', 'archivo')
+      fields = ('titulo', 'archivo', 'cliente')
+
+class PeticionForm(forms.ModelForm):
+     cliente = ClienteModelChoiceField(queryset=Cliente.objects.all())
+     class Meta:
+      model = Peticion
+      fields = ('titulo', 'descripcion', 'fechaLimite','cliente')
 
 class ClienteForm(forms.ModelForm):
 

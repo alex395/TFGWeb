@@ -1,7 +1,7 @@
 from .models import Noticia
 from .forms import NoticiaForm
-from .models import Aviso, Cliente, Envio
-from .forms import AvisoForm, ClienteForm, EnvioForm
+from .models import Aviso, Cliente, Envio, Peticion
+from .forms import AvisoForm, ClienteForm, EnvioForm, PeticionForm
 from django.utils import timezone
 import xlrd
 import os
@@ -73,23 +73,26 @@ def noticiaEditar(request, pk):
 
 def excelActualizar(request):
     myfile = request.FILES['file']
-    book = xlrd.open_workbook(file_contents=myfile.read())
-    sheet = book.sheet_by_name("Sheet1")
-    Cliente.objects.all().delete()
-    for r in range(3, sheet.nrows):
-        form = ClienteForm(request.POST)
-        cliente = form.save(commit=False)
-        nombre = sheet.cell(r,0).value
-        apellidos = sheet.cell(r,1).value
-        email = sheet.cell(r,2).value
-        telefono = sheet.cell(r,3).value
-        direccion = sheet.cell(r,4).value
-        cliente.nombre = nombre
-        cliente.apellidos = apellidos
-        cliente.email = email
-        cliente.telefono = telefono
-        cliente.direccion = direccion
-        cliente.save()
+    name = request.FILES['file'].name
+    if name[-3:] == "xls" or name[-3:]== "xlsx":
+      book = xlrd.open_workbook(file_contents=myfile.read())
+      sheet = book.sheet_by_name("Sheet1")
+      Cliente.objects.all().delete()
+      for r in range(3, sheet.nrows):
+          form = ClienteForm(request.POST)
+          cliente = form.save(commit=False)
+          nombre = sheet.cell(r,0).value
+          apellidos = sheet.cell(r,1).value
+          email = sheet.cell(r,2).value
+          telefono = sheet.cell(r,3).value
+          direccion = sheet.cell(r,4).value
+          cliente.nombre = nombre
+          cliente.apellidos = apellidos
+          cliente.email = email
+          cliente.telefono = telefono
+          cliente.direccion = direccion
+          cliente.save()
+    return redirect('/')
 
 def envioList(request):
         envios = Envio.objects.all()
@@ -114,3 +117,31 @@ def envioDescargar(request, path):
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
     raise Http404
+
+def peticionEdit(request):
+        if request.method == "POST":
+            form = PeticionForm(request.POST)
+            if form.is_valid():
+                peticion = form.save(commit=False)
+                peticion.fechaEnvio = timezone.now()
+                peticion.save()
+                return redirect('/')
+        else:
+            form = PeticionForm()
+        return render(request, 'peticion/edit.html', {'form': form})
+
+def peticionList(request):
+        peticiones = Peticion.objects.filter(fechaEnvio__lte=timezone.now()).order_by('fechaEnvio')
+        return render(request, 'peticion/list.html', {'peticiones': peticiones})
+
+def peticionEditar(request, pk):
+        peticion = get_object_or_404(Peticion, pk=pk)
+        if request.method == "POST":
+            form = PeticionForm(request.POST, instance=peticion)
+            if form.is_valid():
+                peticion = form.save(commit=False)
+                peticion.save()
+                return redirect('/')
+        else:
+            form = PeticionForm(instance=peticion)
+        return render(request, 'peticion/edit.html', {'form': form})

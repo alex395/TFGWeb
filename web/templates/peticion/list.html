@@ -14,14 +14,17 @@
     <!-- SU CONTENIDO VA AQUÍ -->
     <div>
       <br>
-          <h1><a href="/">Lista de Envios</a></h1>
+          <h1><a href="/">Peticiones</a></h1>
       </div>
 
-      {% for envio in envios %}
+      {% for peticion in peticiones %}
           <div>
-            <h1>{{ envio.titulo }}</h1>
-            <p>Destinatario: {{ envio.cliente.nombre}} {{ envio.cliente.apellidos}}</p>
-              <a class="btn btn-default" href="{% url 'envioDescargar' path=envio.archivo %}">Descargar<span class="glyphicon glyphicon-pencil"></span></a>
+            <h1>{{peticion.titulo }}</h1>
+              <p>{{peticion.descripcion|linebreaksbr }}</p>
+              <p>Fecha Envio: {{ peticion.fechaEnvio}}</p>
+              <p>Fecha Limite: {{ peticion.fechaLimite}}</p>
+              <p>Destinatario: {{ peticion.cliente.nombre}} {{ peticion.cliente.apellidos}}</p>
+              <a class="btn btn-default" href="{% url 'peticionEditar' pk=peticion.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
           </div>
       {% endfor %}
   </div>
