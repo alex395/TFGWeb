@@ -25,7 +25,7 @@ SECRET_KEY = 'a7dp$huj_atg(relp2$2wuj&k!7*rv-9xfk!pfim@l3og6^ms&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'webasecon',
-         'USER': 'root',
-         'PASSWORD': '',
-         'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
+         'NAME': 'ardbud$asecontfg',
+         'USER': 'ardbud',
+         'PASSWORD': 'tfgasecon18',
+         'HOST': 'ardbud.mysql.pythonanywhere-services.com',  # Or an IP Address that your DB is hosted on
          'PORT': '3306',
      }
 }

@@ -23,7 +23,6 @@ def noticiaEdit(request):
             form = NoticiaForm(request.POST)
             if form.is_valid():
                 noticia = form.save(commit=False)
-                noticia.autor = request.user
                 noticia.fecha = timezone.now()
                 noticia.save()
                 return redirect('/')

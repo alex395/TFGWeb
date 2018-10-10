@@ -20,7 +20,6 @@
       {% for noticia in noticias %}
           <div>
             <h1>{{ noticia.titulo }}</h1>
-              <p>Autor: {{ noticia.autor }}</p>
               <p>{{ noticia.descripcion|linebreaksbr }}</p>
               <p>Publicado: {{ noticia.fecha}}</p>
               <a class="btn btn-default" href="{% url 'noticiaEditar' pk=noticia.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>

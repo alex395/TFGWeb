@@ -10,7 +10,6 @@ class Noticia(models.Model):
     (TELEFONO, 'Telefono'),
     (AMBOS, 'Ambos'),
     (NINGUNO, 'Ninguno'),)
-    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField()
     imagen = models.TextField(blank=True)
