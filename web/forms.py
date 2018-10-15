@@ -2,13 +2,13 @@ from django import forms
 from django.forms import ModelChoiceField
 from .models import Noticia
 from .models import Aviso
-from .models import Cliente, Envio, Peticion
+from .models import Usuario, Recibo, Peticion, Noticias_usuarios, Envio
 
 class NoticiaForm(forms.ModelForm):
 
     class Meta:
      model = Noticia
-     fields = ('titulo', 'descripcion', 'tipoNotificacion', 'imagen')
+     fields = ('titulo', 'descripcion', 'tipoNotificacion', 'foto')
 
 class AvisoForm(forms.ModelForm):
 
@@ -16,24 +16,43 @@ class AvisoForm(forms.ModelForm):
       model = Aviso
       fields = ('titulo', 'descripcion', 'prioridad')
 
-class ClienteModelChoiceField(ModelChoiceField):
+class UsuarioModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return "%s %s" % (obj.nombre,obj.apellidos)
 
-class EnvioForm(forms.ModelForm):
-     cliente = ClienteModelChoiceField(queryset=Cliente.objects.all())
+class ReciboForm(forms.ModelForm):
+     usuario = UsuarioModelChoiceField(queryset=Usuario.objects.all())
      class Meta:
-      model = Envio
-      fields = ('titulo', 'archivo', 'cliente')
+      model = Recibo
+      fields = ('titulo', 'pdf', 'usuario')
 
 class PeticionForm(forms.ModelForm):
-     cliente = ClienteModelChoiceField(queryset=Cliente.objects.all())
+     usuario = UsuarioModelChoiceField(queryset=Usuario.objects.all())
      class Meta:
       model = Peticion
-      fields = ('titulo', 'descripcion', 'fechaLimite','cliente')
+      fields = ('titulo', 'descripcion', 'fechaLimite','usuario')
 
-class ClienteForm(forms.ModelForm):
+class UsuarioForm(forms.ModelForm):
 
      class Meta:
-      model = Cliente
+      model = Usuario
       fields = ()
+
+class UsuarioForm(forms.ModelForm):
+
+     class Meta:
+      model = Usuario
+      fields = ()
+
+class EnvioForm(forms.ModelForm):
+
+     class Meta:
+      model = Envio
+      fields = ()
+
+class Noticias_usuariosForm(forms.ModelForm):
+
+     class Meta:
+         model = Noticias_usuarios
+         fields = ()
+

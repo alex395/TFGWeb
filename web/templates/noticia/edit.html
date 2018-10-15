@@ -11,7 +11,7 @@
        <body>
      <div class="container">
      <h1><a href="/">Nueva noticia</a></h1>
-    <form method="POST" class="noticia-form">{% csrf_token %}
+    <form method="POST" class="noticia-form" enctype="multipart/form-data">{% csrf_token %}
       {{ form.as_p }}
     <button type="submit" class="save btn btn-default">Guardar</button>
           </form>
