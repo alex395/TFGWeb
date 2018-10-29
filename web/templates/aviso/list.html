@@ -23,7 +23,7 @@
               <p>{{aviso.descripcion|linebreaksbr }}</p>
               <p>Prioridad: {{ aviso.prioridad}}</p>
               <p>Fecha: {{ aviso.fechaLimite}}</p>
-              <a class="btn btn-default" href="{% url 'avisoEditar' pk=aviso.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
+              <a class="btn btn-default" href="{% url 'web:avisoEditar' pk=aviso.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
           </div>
       {% endfor %}
   </div>

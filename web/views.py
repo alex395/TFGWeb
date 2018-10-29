@@ -1,7 +1,8 @@
 from .models import Noticia
 from .forms import NoticiaForm
+from .corsthttp import CORSRequestHandler
 from .models import Aviso, Usuario, Recibo, Peticion, Noticias_usuarios, Envio
-from .forms import AvisoForm, UsuarioForm, ReciboForm, PeticionForm, Noticias_usuariosForm, EnvioForm
+from .forms import AvisoForm, UsuarioForm, ReciboForm, PeticionForm, Noticias_usuariosForm, EnvioForm, MailForm
 from django.utils import timezone
 import xlrd
 import os
@@ -12,132 +13,168 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core import serializers
 from django.db.models import Q
+from http.server import HTTPServer, SimpleHTTPRequestHandler, test
+import sys
+from django.core.mail import EmailMessage
+from random import choice
+import base64
+from django.core.files.base import ContentFile
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
 def index(request):
         return render(request, 'index/index.html', {})
 
+#---------- API ----------
 def listNews(request):
-         print ("Access-Control-Allow-Origin:\n*")
+         print ("Access-Control-Allow-Origin:")
          print ("Access-Control-Allow-Headers:\n")
          print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          noticias = Noticia.objects.filter(fecha__lte=timezone.now()).order_by('fecha')
          data = serializers.serialize('json', noticias)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def listAvisos(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
+         print ("Access-Control-Allow-Origin:*")
+         print ("Access-Control-Allow-Headers:")
+         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS")
          avisos = Aviso.objects.filter(fechaLimite__lte=timezone.now()).order_by('fechaLimite')
          data = serializers.serialize('json', avisos)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
+@csrf_exempt
 def addNew(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
+         body_unicode = request.body.decode('utf-8')
+         body = json.loads(body_unicode)
          form = Noticias_usuariosForm(request.POST)
          noticia_usuario = form.save(commit=False)
-         noticia_usuario.usuario_id = request.GET['usuario_id']
-         noticia_usuario.noticia_id = request.GET['noticia_id']
+         noticia_usuario.usuario_id = body['usuario_id']
+         noticia_usuario.noticia_id = body['noticia_id']
          noticia_usuario.save()
-         return HttpResponse('')
+         response = HttpResponse('true', content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def containsNews(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          noticias_usuarios = Noticias_usuarios.objects.filter(usuario_id=request.GET['usuario_id'])
          data = serializers.serialize('json', noticias_usuarios)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def noticiasUsuarios(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          noticias_usuarios = Noticias_usuarios.objects.all()
          data = serializers.serialize('json', noticias_usuarios)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def myNews(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          noticias = Noticia.objects.raw('SELECT * FROM web_noticia INNER JOIN web_noticias_usuarios ON web_noticia.id=web_noticias_usuarios.noticia_id where web_noticias_usuarios.usuario_id='+request.GET['usuario_id'])
          data = serializers.serialize('json', noticias)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 
 def createEnvio(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          avisos = Aviso.objects.filter(fechaLimite__lte=timezone.now()).order_by('fechaLimite')
          data = serializers.serialize('json', avisos)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def displayUser(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          users = Usuario.objects.filter(id=request.GET['usuario_id'])
          data = serializers.serialize('json', users)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
+@csrf_exempt
 def getUser(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
-         user = Usuario.objects.filter(Q(email=request.GET['email']) & Q(password=request.GET['password']))
+         body_unicode = request.body.decode('utf-8')
+         body = json.loads(body_unicode)
+         user = Usuario.objects.filter(Q(email=body['email']) & Q(password=body['password']))
          data = serializers.serialize('json', user)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
+
+@csrf_exempt
+def changePass(request):
+         body_unicode = request.body.decode('utf-8')
+         body = json.loads(body_unicode)
+         Usuario.objects.filter(id=body['usuario_id']).update(password=body['password'])
+         user= Usuario.objects.filter(id=body['usuario_id'])
+         data = serializers.serialize('json', user)
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
+
 
 def myEnvios(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          envios = Envio.objects.filter(usuario_id=request.GET['user_id'])
          data = serializers.serialize('json', envios)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
+
 
 def myPeticiones(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
          peticiones = Peticion.objects.filter(usuario_id=request.GET['user_id'])
          data = serializers.serialize('json', peticiones)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
 def myRecibos(request):
          print ("Access-Control-Allow-Origin:\n*")
          print ("Access-Control-Allow-Headers:\n")
          print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
-         recibos = Recibo.objects.filter(usuario_id=request.GET['user_id'])
+         recibos = Recibo.objects.filter(usuario_id=request.GET['usuario_id'])
          data = serializers.serialize('json', recibos)
-         return HttpResponse(data, content_type='application/json')
+         response = HttpResponse(data, content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
+@csrf_exempt
 def removeNew(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
-         Noticias_usuarios.objects.filter(Q(noticia_id=request.GET['noticia_id']) & Q(usuario_id=request.GET['usuario_id'])).delete()
-         return HttpResponse('')
+         body_unicode = request.body.decode('utf-8')
+         body = json.loads(body_unicode)
+         Noticias_usuarios.objects.filter(Q(noticia_id=body['noticia_id']) & Q(usuario_id=body['usuario_id'])).delete()
+         response = HttpResponse('true', content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         return response
 
+@csrf_exempt
 def createEnvioApi(request):
-         print ("Access-Control-Allow-Origin:\n*")
-         print ("Access-Control-Allow-Headers:\n")
-         print ("Access-Control-Allow-Methods: GET, POST, OPTIONS\n")
-         form = EnvioForm(request.POST)
+         body_unicode = request.body.decode('utf-8')
+         body = json.loads(body_unicode)
+         format, imgstr = body['archivo'].split(';charset=utf-8;base64,')
+         ext = body['extension']
+         data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+         form = EnvioForm()
          envio = form.save(commit=False)
-         envio.usuario_id = request.GET['usuario_id']
-         envio.peticion_id = request.GET['peticion_id']
-         envio.titulo = request.GET['titulo']
-         envio.archivo = request.GET['archivo']
-         envio.fecha = request.GET['fecha']
+         envio.usuario_id = body['usuario_id']
+         envio.peticion_id = body['peticion_id']
+         envio.titulo = body['titulo']
+         envio.archivo = data
+         envio.fecha = timezone.now()
          envio.save()
-         return HttpResponse('')
+         Peticion.objects.filter(id=body['peticion_id']).update(resuelto=True)
+         response = HttpResponse('true', content_type='application/json')
+         response.__setitem__("Access-Control-Allow-Origin","*")
+         response.__setitem__("Access-Control-Allow-Headers","*")
+         response.__setitem__("Access-Control-Allow-Methods","GET, POST, OPTIONS")
+         return response
+
+#---------- API ----------
 
 def noticiaList(request):
         noticias = Noticia.objects.filter(fecha__lte=timezone.now()).order_by('fecha')
@@ -149,14 +186,26 @@ def noticiaEdit(request):
             if form.is_valid():
                 noticia = form.save(commit=False)
                 noticia.fecha = timezone.now()
+                noticia.url = request.build_absolute_uri()
                 noticia.save()
                 return redirect('/')
         else:
             form = NoticiaForm()
         return render(request, 'noticia/edit.html', {'form': form})
 
+def post(request, destino):
+        if request.method == "POST":
+           form=MailForm(request.POST)
+           if form.is_valid():
+               email = EmailMessage(form.cleaned_data['asunto'], form.cleaned_data['contenido'], 'ardbudus@gmail.com', [destino])
+               email.send()
+               return HttpResponseRedirect('/')
+        else:
+           form = MailForm()
+        return render(request,'usuario/mail.html',{'form':form})
+
 def avisoList(request):
-        avisos = Aviso.objects.filter(fecha__lte=timezone.now()).order_by('fechaLimite')
+        avisos = Aviso.objects.filter(fechaLimite__lte=timezone.now()).order_by('fechaLimite')
         return render(request, 'aviso/list.html', {'avisos': avisos})
 
 def avisoEdit(request):
@@ -270,3 +319,49 @@ def peticionEditar(request, pk):
         else:
             form = PeticionForm(instance=peticion)
         return render(request, 'peticion/edit.html', {'form': form})
+
+def usuarioEdit(request):
+        if request.method == "POST":
+            form = UsuarioForm(request.POST)
+            if form.is_valid():
+                    usuario = form.save(commit=False)
+                    pwd = generarPass()
+                    usuario.password = pwd
+                    usuario.save()
+                    email = EmailMessage('Bienvenido '+form.cleaned_data['nombre']+' a Asecon', 'Su contraseña para acceder al área cliente de nuestra app es '+pwd, 'ardbudus@gmail.com', [form.cleaned_data['email']])
+                    email.send()
+                    return redirect('/')
+        else:
+            form = UsuarioForm()
+        return render(request, 'usuario/edit.html', {'form': form})
+
+
+def generarPass():
+         longitud = 8
+         valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
+         p = ""
+         p = p.join([choice(valores) for i in range(longitud)])
+         return p
+
+def usuarioEditar(request, pk):
+        usuario = get_object_or_404(Usuario, pk=pk)
+        if request.method == "POST":
+            form = UsuarioForm(request.POST, instance=usuario)
+            if form.is_valid():
+                usuario = form.save(commit=False)
+                usuario.save()
+                return redirect('/')
+        else:
+            form = UsuarioForm(instance=usuario)
+        return render(request, 'usuario/edit.html', {'form': form})
+
+
+def usuarioList(request):
+        usuarios = Usuario.objects.all()
+        return render(request, 'usuario/list.html', {'usuarios': usuarios})
+
+def removeUsuario(request, pk):
+         Usuario.objects.filter(id=pk).delete()
+         return redirect('/')
+
+

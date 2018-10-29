@@ -24,7 +24,7 @@
               <p>Fecha Envio: {{ peticion.fechaEnvio}}</p>
               <p>Fecha Limite: {{ peticion.fechaLimite}}</p>
               <p>Destinatario: {{ peticion.usuario.nombre}} {{ peticion.usuario.apellidos}}</p>
-              <a class="btn btn-default" href="{% url 'peticionEditar' pk=peticion.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
+              <a class="btn btn-default" href="{% url 'web:peticionEditar' pk=peticion.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
           </div>
       {% endfor %}
   </div>

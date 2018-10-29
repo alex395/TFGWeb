@@ -21,7 +21,7 @@
           <div>
             <h1>{{ recibo.titulo }}</h1>
             <p>Destinatario: {{ recibo.usuario.nombre}} {{ recibo.usuario.apellidos}}</p>
-              <a class="btn btn-default" href="{% url 'envioDescargar' path=recibo.pdf %}">Descargar<span class="glyphicon glyphicon-pencil"></span></a>
+              <a class="btn btn-default" href="{% url 'web:envioDescargar' path=recibo.pdf %}">Descargar<span class="glyphicon glyphicon-pencil"></span></a>
           </div>
       {% endfor %}
   </div>

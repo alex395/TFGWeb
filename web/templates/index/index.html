@@ -59,6 +59,27 @@
     </div>
     <br>
     <br>
+     <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Usuarios
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="usuario/list">Lista de usuarios</a>
+          <a class="dropdown-item" href="usuario/edit">Nuevo usuario</a>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Salir
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="{% url 'seguridad:salir' %}">Salir</a>
+        </div>
+      </div>
+      <br>
+      <br>
         <script type="text/javascript" language="javascript">
   function checkfile(sender) {
       var validExts = new Array(".xlsx", ".xls");
