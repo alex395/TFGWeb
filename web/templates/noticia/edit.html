@@ -1,20 +1,137 @@
        <!DOCTYPE html>
        <html lang="es">
        <head>
+           <link rel="icon" type="image/png" href="https://i.imgur.com/zEQnupo.png" />
          <title>Nueva noticia</title>
          <meta charset="utf-8">
          <!-- Viewport Meta Tag -->
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <!-- Bootstrap CSS -->
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+          <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+         <style>
+
+         body{
+              background-image: url("https://i.imgur.com/gbs74Xe.jpg");
+              font-family: 'Playfair Display', serif;
+         }
+
+         label{
+            display: block;
+            margin: .5em 0 10px 0;
+        }
+
+        .header {
+            padding-top: 15px;
+        }
+
+
+         .container{
+            padding: 30px;
+            width: 35%;
+            background : white;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: left;
+         }
+
+         input {
+             border-radius : 20px ;
+             background : #F5F5F5;
+             padding: 10px;
+             border : 0px solid transparent;
+         }
+
+         input:focus{
+             padding: 10px;
+             border: 1px solid black !important;
+         }
+
+         textarea {
+             border-radius : 20px ;
+             background : #F5F5F5;
+             padding: 10px;
+             border : 0px solid transparent;
+         }
+
+         textarea:focus {
+             padding: 10px;
+             border: 1px solid black !important;
+         }
+
+        h1 {
+            font-weight: 900;
+            font-size: 30px;
+            text-transform: uppercase;
+            text-align : center !important;
+        }
+
+        hr{
+            border : 1px solid black;
+        }
+
+        button {
+            font-weight: 900;
+            font-size: 30px;
+          border-radius: 10px;
+          background-color: black;
+          border: none;
+          color: white;
+          text-align: center;
+          font-size: 28px;
+          padding: 10px;
+          width: 150px;
+          transition: all 0.5s;
+          cursor: pointer;
+          margin: 5px;
+        }
+
+        button span {
+          cursor: pointer;
+          display: inline-block;
+          position: relative;
+          transition: 0.5s;
+        }
+
+        button span:after {
+          content: '\270E';
+          position: absolute;
+          opacity: 0;
+          top: 0;
+          right: -20px;
+          transition: 0.5s;
+        }
+
+        button:hover span {
+          padding-right: 25px;
+        }
+
+        button:hover span:after {
+          opacity: 1;
+          right: 0;
+        }
+
+        .boton{
+            text-align:center;
+        }
+         </style>
        </head>
        <body>
      <div class="container">
-     <h1><a href="/">Nueva noticia</a></h1>
+                         <a class="btn btn-primary" href="/" role="button">Volver</a>
+
+
+     <div class="header">
+     <h1>noticia</h1>
+     <hr>
+     </div>
+     <div class="formulario">
     <form method="POST" class="noticia-form" enctype="multipart/form-data">{% csrf_token %}
       {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Guardar</button>
+        <div class="boton">
+        <button type="submit" class="save btn btn-default"><span>Publicar</span></button>
+        </div>
           </form>
+          </div>
          </div>
 
          <!-- JavaScript: placed at the end of the document so the pages load faster -->

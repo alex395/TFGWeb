@@ -3,11 +3,12 @@ from django.utils import timezone
 from datetime import date
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-# Create your models here.
+# En este archivo están creados los diferentes modelos del sistema, definiendo sus atributos.
+
 
 def no_past(value):
     today = date.today()
-    if value.date() < today:
+    if value < today:
         raise ValidationError('La fecha debe ser futura')
 
 class Noticia(models.Model):
@@ -21,10 +22,9 @@ class Noticia(models.Model):
     (NINGUNO, 'Ninguno'),)
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField()
-    url = models.URLField(max_length=400)
+    url = models.URLField(max_length=1000)
     foto = models.ImageField(upload_to='imagenes', null=True, blank=True)
     fecha = models.DateField(default=timezone.now)
-    tipoNotificacion = models.TextField(choices=notificacion_choices, default = AMBOS)
 
 class Aviso(models.Model):
     BAJO = 'Bajo'
@@ -34,8 +34,8 @@ class Aviso(models.Model):
     (MEDIO, 'Medio'),
     (ALTO, 'Alto'),)
     titulo = models.CharField(max_length=200)
-    descripcion = models.TextField()
-    fechaLimite = models.DateTimeField(null=False, blank=False, validators=[no_past])
+    descripcion = models.CharField(max_length=400)
+    fechaLimite = models.DateField(null=False, blank=False, validators=[no_past])
     prioridad = models.TextField(choices=prioridad_choices, default = MEDIO)
 
 class Usuario(models.Model):
@@ -50,8 +50,8 @@ class Usuario(models.Model):
 class Peticion(models.Model):
     titulo = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=200)
-    fechaEnvio = models.DateTimeField(default=timezone.now)
-    fechaLimite = models.DateTimeField()
+    fechaEnvio = models.DateField(default=timezone.now)
+    fechaLimite = models.DateField(null=False, blank=False, validators=[no_past])
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, null=True)
     resuelto = models.BooleanField(default=False)
 
@@ -59,13 +59,13 @@ class Peticion(models.Model):
 class Recibo(models.Model):
     titulo = models.CharField(max_length=200)
     pdf = models.FileField(upload_to='archivos')
-    fecha = models.DateTimeField(default=timezone.now)
+    fecha = models.DateField(default=timezone.now)
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, null=True)
 
 class Envio(models.Model):
     titulo = models.CharField(max_length=200)
     archivo = models.FileField(upload_to='archivos')
-    fecha = models.DateTimeField(default=timezone.now)
+    fecha = models.DateField(default=timezone.now)
     usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, null=True)
     peticion = models.ForeignKey ('Peticion', on_delete=models.CASCADE, null=True)
 

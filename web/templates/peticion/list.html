@@ -1,33 +1,223 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Bootstrap Example Template</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/zEQnupo.png" />
+  <title>Peticiones</title>
   <meta charset="utf-8">
   <!-- Viewport Meta Tag -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
-</head>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+
+         body{
+              font-family: 'Pacifico', cursive;
+               background: url("https://i.imgur.com/7JwBAJj.jpg") no-repeat center center fixed;
+              -webkit-background-size: cover;
+              -moz-background-size: cover;
+              -o-background-size: cover;
+              background-size: cover;
+         }
+
+        .container{
+            width : 50%;
+         }
+
+
+         .peticion{
+            width: 100%;
+            height : 15%;
+            background : url("https://i.imgur.com/aPJLWCR.jpg") no-repeat center;
+            background-size: 100% 100%;
+            text-align: center;
+            margin-top: 8%;
+            border-radius: 10px;
+            padding:20px;
+         }
+
+         .fecha {
+             padding-top: 0px !important;
+             padding-bottom : 5px !important;
+         }
+
+         .fecha:before{
+             content: '\2690';
+         }
+
+         .fechaLimite {
+             padding-top: 0px !important;
+             padding-bottom : 5px !important;
+         }
+
+         .fechaLimite:before{
+             content: '\2691';
+         }
+
+         .destinatario {
+             padding-top: 0px !important;
+             padding-bottom : 5px !important;
+         }
+
+         .destinatario:before{
+             content: '\2709';
+         }
+
+
+        h1 {
+            padding-top:20px;
+            padding-left:60px;
+            padding-right:60px;
+            padding-bottom:20px;
+            font-weight: 500;
+            font-size: 30px;
+            text-align : center !important;
+        }
+
+        p {
+            padding-left:60px;
+            padding-right:60px;
+        }
+
+        .btn {
+            font-weight: 900;
+            font-size: 15px;
+          border-radius: 10px;
+          background-color: #0b4c46;
+          border: none;
+          color: white;
+          text-align: center;
+          padding: 10px;
+          width: 120px;
+          transition: all 0.5s;
+          cursor: pointer;
+          margin: 5px;
+        }
+
+        .btn span {
+          cursor: pointer;
+          display: inline-block;
+          position: relative;
+          transition: 0.5s;
+          color: white !important;
+        }
+
+        .btn span:after {
+          content: '\270E';
+          position: absolute;
+          opacity: 0;
+          top: 0;
+          right: -20px;
+          transition: 0.5s;
+          color: white !important;
+        }
+
+        .btn:hover span {
+          padding-right: 25px;
+          color: white !important;
+        }
+
+        .btn:hover span:after {
+          opacity: 1;
+          right: 0;
+          color: white !important;
+        }
+
+        .boton{
+            text-align:center;
+            padding-bottom:30px;
+        }
+
+        .busqueda{
+            margin-top : 5%;
+            display: inline-block;
+            background : #0b4c46;
+            border-radius : 20px;
+            padding : 30px;
+            text-align:center ;
+            width : 100%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .busqueda input {
+            width: 70%;
+            background : white;
+            padding : 10px;
+            border-radius : 20px;
+            border : 0px solid transparent;
+
+        }
+
+        .busqueda button {
+            background :transparent;
+            color :white;
+            border : 0px solid transparent;
+            text-align: right !important;
+            margin-left : 30px;
+        }
+
+
+
+        .busqueda
+         </style>
+    </head>
 <body>
 
   <div class="container">
     <!-- SU CONTENIDO VA AQUÍ -->
-    <div>
-      <br>
-          <h1><a href="/">Peticiones</a></h1>
-      </div>
+                   <a class="btn btn-primary" href="/" role="button">Volver</a>
 
+
+
+    <div class="busqueda">
+    <form action="{% url 'web:peticionFiltrar' %}" method="post">
+        {% csrf_token %}
+        <i class="material-icons" style="color:white;">person</i>
+        <input type="text" id="name" name="user_name" placeholder="Cliente"/>
+        <button type="submit"><i class="material-icons">search</i></button>
+
+    </form>
+    </div>
       {% for peticion in peticiones %}
-          <div>
+          <div class="peticion">
             <h1>{{peticion.titulo }}</h1>
               <p>{{peticion.descripcion|linebreaksbr }}</p>
-              <p>Fecha Envio: {{ peticion.fechaEnvio}}</p>
-              <p>Fecha Limite: {{ peticion.fechaLimite}}</p>
-              <p>Destinatario: {{ peticion.usuario.nombre}} {{ peticion.usuario.apellidos}}</p>
-              <a class="btn btn-default" href="{% url 'web:peticionEditar' pk=peticion.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a>
+              <p class="fecha">  Fecha envío: {{ peticion.fechaEnvio}}</p>
+              <p class="fechaLimite">  Fecha límite: {{ peticion.fechaLimite}}</p>
+              <p class="destinatario">  Destinatario: {{ peticion.usuario.nombre}} {{ peticion.usuario.apellidos}}</p>
+              {% for envio in envios %}
+              {% if envio.peticion_id == peticion.id %}
+              <a class="btn btn-default" href="{% url 'web:envioDescargar' path=envio.archivo %}">Descargar</a>
+              {% endif %}
+              {% endfor %}
+              <a class="btn btn-default" href="{% url 'web:peticionEditar' pk=peticion.pk %}"><span class="glyphicon glyphicon-pencil">Editar</span></a>
           </div>
       {% endfor %}
   </div>
+
+  {% if peticiones.has_next or peticiones.has_previous %}
+
+
+    <ul class="pagination">
+        {% if peticiones.has_previous %}
+            <li><a href="?page={{ peticiones.previous_page_number }}" class="btn btnpages"><i
+                    class="glyphicon glyphicon-chevron-left"></i></a></li>
+        {% endif %}
+        {% for page in peticiones.paginator.page_range %}
+            <li class="{% if items.number == page %}active{% endif %}">
+                <a class="btn btnpages" href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if peticiones.has_next %}
+            <li>
+                <a href="?page={{ peticiones.next_page_number }}" class="btn btnpages">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    {% endif %}
 
   <!-- JavaScript: placed at the end of the document so the pages load faster -->
   <!-- jQuery library -->

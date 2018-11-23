@@ -2,25 +2,173 @@
 <!DOCTYPE html>
   <html lang="es">
   <head>
+      <link rel="icon" type="image/png" href="https://i.imgur.com/zEQnupo.png" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <title>Envio</title>
+    <title>Recibo</title>
     <meta charset="utf-8">
     <!-- Viewport Meta Tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+     <link href="https://fonts.googleapis.com/css?family=Old+Standard+TT" rel="stylesheet">
+    <style>
+
+         body{
+              background-image: url("https://i.imgur.com/z5vhiBs.jpg");
+              height: 100%;
+
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+              font-family: 'Old Standard TT', serif;
+         }
+
+         label{
+            display: block;
+            margin: .5em 0 10px 0;
+        }
+
+        .header {
+            padding-top: 15px;
+        }
+
+
+         .container{
+            margin-top: 3%;
+            padding: 30px;
+            width : 50%;
+            height : 14%;
+            border-radius: 6px;
+            background : url("https://i.imgur.com/egW3fjA.jpg") no-repeat center;
+            background-size: 100% 100%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+         }
+
+         input {
+             width : 50%;
+             background : transparent;
+             padding: 10px;
+             border : 0px solid transparent;
+             border-bottom: 1px solid black !important;
+         }
+
+         input:hover{
+             width : 60%;
+             border-bottom: 2px solid blue !important;
+             transition-duration: 1s;
+         }
+
+         input:focus{
+             width : 60%;
+             border-bottom: 2px solid blue !important;
+         }
+
+         select {
+             text-align:center;
+             width : 25%;
+             background : transparent;
+             padding: 10px;
+             border : 0px solid transparent;
+             border-bottom: 1px solid black !important;
+         }
+
+           select:hover{
+             width : 30%;
+             border-bottom: 2px solid blue !important;
+             transition-duration: 1s;
+         }
+
+         select:focus{
+             width : 30%;
+             border-bottom: 2px solid blue !important;
+         }
+
+         textarea {
+             border-radius : 20px ;
+             background : #F5F5F5;
+             padding: 10px;
+             border : 0px solid transparent;
+         }
+
+         textarea:focus {
+             padding: 10px;
+             border: 1px solid black !important;
+         }
+
+        h1 {
+            font-weight: 900;
+            font-size: 30px;
+            text-transform: uppercase;
+            text-align : center !important;
+        }
+
+        hr{
+            border : 1px solid black;
+        }
+
+        button {
+            font-weight: 900;
+            font-size: 30px;
+          border-radius: 10px;
+          background-color: black;
+          border: none;
+          color: white;
+          text-align: center;
+          font-size: 28px;
+          padding: 10px;
+          width: 150px;
+          transition: all 0.5s;
+          cursor: pointer;
+          margin: 5px;
+        }
+
+        button span {
+          cursor: pointer;
+          display: inline-block;
+          position: relative;
+          transition: 0.5s;
+        }
+
+        button span:after {
+          content: '\2709';
+          position: absolute;
+          opacity: 0;
+          top: 0;
+          right: -20px;
+          transition: 0.5s;
+        }
+
+        button:hover span {
+          padding-right: 25px;
+        }
+
+        button:hover span:after {
+          opacity: 1;
+          right: 0;
+        }
+
+        .boton{
+            text-align:center;
+        }
+         </style>
   </head>
+
   <body>
 
     <div class="container">
       <!-- SU CONTENIDO VA AQUÍ -->
+                <a class="btn btn-primary" href="/" role="button">Volver</a>
 
-      <h1><a href="/">Nuevo envío</a></h1>
+
+      <div class="formulario">
       <form method="POST" class="envio-form" enctype="multipart/form-data">{% csrf_token %}
        {{ form.as_p }}
-      <button type="submit" class="save btn btn-default">Guardar</button>
+       <div class="boton">
+      <button type="submit" class="save btn btn-default"><span>Enviar</span></button>
+        </div>
            </form>
-
+    </div>
     </div>
 
     <!-- JavaScript: placed at the end of the document so the pages load faster -->

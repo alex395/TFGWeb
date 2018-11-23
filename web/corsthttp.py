@@ -1,6 +1,8 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler, test
 import sys
 
+#Aquí se define el CORS Request.
+
 class CORSRequestHandler (SimpleHTTPRequestHandler):
     def end_headers (self):
         self.send_header('Access-Control-Allow-Origin', '*')

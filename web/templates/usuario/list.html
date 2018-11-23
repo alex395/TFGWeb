@@ -1,48 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Lista de usuarios</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/zEQnupo.png" />
+  <title>Clientes</title>
   <meta charset="utf-8">
   <!-- Viewport Meta Tag -->
   {% load static %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
-</head>
+ <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+ <style>
+
+         body{
+              font-family: 'Playfair Display', serif;
+               background: url("https://i.imgur.com/ORPjNDJ.jpg") no-repeat center center fixed;
+              -webkit-background-size: cover;
+              -moz-background-size: cover;
+              -o-background-size: cover;
+              background-size: cover;
+         }
+
+         label{
+            display: block;
+            margin: .5em 0 10px 0;
+            text-align: center;
+        }
+
+        .header {
+            padding-top: 15px;
+        }
+
+        img {
+            width : 20%;
+            height : 20%;
+            margin-bottom : 10px;
+        }
+
+         .container{
+            padding: 30px;
+            width : 70%;
+            height : 100%;
+            background : white;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+
+         }
+
+        hr{
+            border : 1px solid black;
+        }
+
+        .edit:hover{
+            color: green;
+        }
+
+        .mail:hover{
+            color: red;
+        }
+
+        .delete:hover{
+            color: red;
+        }
+
+        th{
+            padding:10px;
+            text-align:center;
+        }
+
+        td {
+            padding:10px;
+            font-size: 14px;
+        }
+
+        button {
+            font-weight: 900;
+            font-size: 30px;
+          border-radius: 10px;
+          background-color: #0b4c46;
+          border: none;
+          color: white;
+          text-align: center;
+          font-size: 28px;
+          padding: 10px;
+          width: 150px;
+          transition: all 0.5s;
+          cursor: pointer;
+          margin: 5px;
+          margin-top: 25px !important;
+        }
+
+        button span {
+          cursor: pointer;
+          display: inline-block;
+          position: relative;
+          transition: 0.5s;
+        }
+
+        button span:after {
+          content: ' \270E';
+          position: absolute;
+          opacity: 0;
+          top: 0;
+          right: -20px;
+          transition: 0.5s;
+        }
+
+        button:hover span {
+          padding-right: 25px;
+        }
+
+        button:hover span:after {
+          opacity: 1;
+          right: 0;
+        }
+
+        .boton{
+            text-align:center;
+        }
+         </style>
+    </head>
 <body>
+
 
   <div class="container">
     <!-- SU CONTENIDO VA AQUÍ -->
     <div>
-      <br>
-          <h1><a href="/">Usuarios</a></h1>
+          <a class="btn btn-primary" href="/" role="button">Volver</a>
+          <a href="http://ardbud.pythonanywhere.com/web/index/usuario/edit"><img src="https://i.imgur.com/pUsbfby.jpg"></a>
       </div>
+      <hr>
 <table>
 <tr>
-  <th>Nombre</th>
-  <th>Apellidos</th>
-  <th>Email</th>
-  <th>Telefono</th>
-  <th>Dirección</th>
+  <th><i class="material-icons">people</i></th>
+  <th><i class="material-icons">email</i></th>
+  <th><i class="material-icons">call</i></th>
+  <th><i class="material-icons">location_on</i></th>
   <th>Editar</th>
-  <th>Enviar correo</th>
+  <th>Mail</th>
   <th>Eliminar</th>
 </tr>
-{% for usuario in usuarios %}
+{% for item in items %}
 <tr>
-  <td> {{ usuario.nombre }}</td>
-  <td> {{ usuario.apellidos }}</td>
-  <td> {{ usuario.email }}</td>
-  <td> {{ usuario.telefono }}</td>
-  <td> {{ usuario.direccion }}</td>
-  <td><a class="btn btn-default" href="{% url 'web:usuarioEditar' pk=usuario.pk %}">Editar<span class="glyphicon glyphicon-pencil"></span></a></td>
-  <td><a class="btn btn-default" href="{% url 'web:post' destino=usuario.email %}">Mail<span class="glyphicon glyphicon-pencil"></span></a></td>
-  <td><a class="btn btn-default" href="{% url 'web:removeUsuario' pk=usuario.pk %}">Eliminar<span class="glyphicon glyphicon-pencil"></span></a></td>
+  <td> {{ item.nombre }} {{ item.apellidos }}</td>
+  <td> {{ item.email }}</td>
+  <td> {{ item.telefono }}</td>
+  <td> {{ item.direccion }}</td>
+  <td><a class="edit" href="{% url 'web:usuarioEditar' pk=item.pk %}"><i class="material-icons">create</i></a></td>
+  <td><a class="mail" href="{% url 'web:post' destino=item.email %}"><i class="material-icons">mail_outline</i></a></td>
+  <td><a class="delete" href="{% url 'web:removeUsuario' pk=item.pk %}"><i class="material-icons">delete</i></a></td>
 </tr>
+
 {% endfor %}
 </table>
 
   </div>
+
+  {% if items.has_next or items.has_previous %}
+
+
+    <ul class="pagination">
+        {% if items.has_previous %}
+            <li><a href="?page={{ items.previous_page_number }}" class="btn btnpages"><i
+                    class="glyphicon glyphicon-chevron-left"></i></a></li>
+        {% endif %}
+        {% for page in items.paginator.page_range %}
+            <li class="{% if items.number == page %}active{% endif %}">
+                <a class="btn btnpages" href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if items.has_next %}
+            <li>
+                <a href="?page={{ items.next_page_number }}" class="btn btnpages">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    {% endif %}
 
   <!-- JavaScript: placed at the end of the document so the pages load faster -->
   <!-- jQuery library -->

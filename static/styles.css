@@ -92,3 +92,9 @@ body{
     font-weight: bold;
     font-size: 15px;
 }
+
+.text-center{
+    width:100%;
+    background : #f8f9fa;
+}
+}

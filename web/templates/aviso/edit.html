@@ -1,20 +1,157 @@
        <!DOCTYPE html>
        <html lang="es">
        <head>
-         <title>Bootstrap Example Template</title>
+           <link rel="icon" type="image/png" href="https://i.imgur.com/zEQnupo.png" />
+         <title>Aviso</title>
          <meta charset="utf-8">
          <!-- Viewport Meta Tag -->
          <meta name="viewport" content="width=device-width, initial-scale=1">
          <!-- Bootstrap CSS -->
          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+         <link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">
+         <style>
+
+         body{
+              font-family: 'Gochi Hand', cursive;
+               background: url("https://i.imgur.com/jxeoqAh.jpg") no-repeat center center fixed;
+              -webkit-background-size: cover;
+              -moz-background-size: cover;
+              -o-background-size: cover;
+              background-size: cover;
+         }
+
+         label{
+            display: block;
+            margin: .5em 0 10px 0;
+            text-align: center;
+        }
+
+        .header {
+            padding-top: 15px;
+        }
+
+        img {
+            width : 35%;
+            height : 35%;
+            margin-bottom : 20px;
+        }
+
+         .container{
+            margin-top: 3%;
+            padding: 5%;
+            padding-top: 10% !important;
+            padding-bottom : 10% !important;
+            width : 70%;
+            height : 40%;
+            border-radius: 6px;
+            background : url("https://img.clipartxtras.com/978a9efbb8cd46aa0ab32de97b0dbf13_sticky-note-svg-clip-arts-download-clip-arts-free-png-backgrounds-post-it-note-clipart-png_500-400.svg") no-repeat center;
+            background-size: 100% 100%;
+            text-align: center;
+         }
+
+         select {
+             text-align:center;
+             width : 15%;
+             background : transparent;
+             padding: 10px;
+             border : 0px solid transparent;
+             border-bottom: 1px solid black !important;
+         }
+
+           select:hover{
+             width : 18%;
+             border-bottom: 2px solid green !important;
+             transition-duration: 1s;
+         }
+
+         select:focus{
+             width : 18%;
+             border-bottom: 2px solid green !important;
+         }
+
+         input {
+             width : 35%;
+             background : transparent;
+             padding: 10px;
+             border : 0px solid transparent;
+             border-bottom: 1px solid black !important;
+         }
+
+         input:hover{
+             width : 45%;
+             border-bottom: 2px solid green !important;
+             transition-duration: 1s;
+         }
+
+         input:focus{
+             width : 45%;
+             border-bottom: 2px solid green !important;
+         }
+
+        hr{
+            border : 1px solid black;
+        }
+
+        button {
+            font-weight: 900;
+            font-size: 30px;
+          border-radius: 10px;
+          background-color: #0b4c46;
+          border: none;
+          color: white;
+          text-align: center;
+          font-size: 28px;
+          padding: 10px;
+          width: 150px;
+          transition: all 0.5s;
+          cursor: pointer;
+          margin: 5px;
+          margin-top: 25px !important;
+        }
+
+        button span {
+          cursor: pointer;
+          display: inline-block;
+          position: relative;
+          transition: 0.5s;
+        }
+
+        button span:after {
+          content: ' \26A0';
+          position: absolute;
+          opacity: 0;
+          top: 0;
+          right: -20px;
+          transition: 0.5s;
+        }
+
+        button:hover span {
+          padding-right: 25px;
+        }
+
+        button:hover span:after {
+          opacity: 1;
+          right: 0;
+        }
+
+        .boton{
+            text-align:center;
+        }
+         </style>
        </head>
        <body>
      <div class="container">
-     <h1><a href="/">Nuevo aviso</a></h1>
+                         <a class="btn btn-primary" href="/" role="button">Volver</a>
+
+
+     <div class="formulario">
     <form method="POST" class="aviso-form">{% csrf_token %}
       {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Guardar</button>
+      <div class="boton">
+    <button type="submit" class="save btn btn-default"><span>Notificar</span></button>
+        </div>
           </form>
+          </div>
          </div>
 
          <!-- JavaScript: placed at the end of the document so the pages load faster -->

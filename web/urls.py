@@ -1,7 +1,7 @@
 from . import views
 from django.urls import path, re_path
 from django.contrib.auth.decorators import login_required
-
+#En este archivo se encuentran todas las redirecciones del componente 'web'.
 urlpatterns = [
         path('index/', login_required(views.index), name='index'),
         path('index/noticia/list', login_required(views.noticiaList)),
@@ -35,6 +35,7 @@ urlpatterns = [
         path(r'^usuario/(?P<pk>[0-9]+)/edit/$', login_required(views.usuarioEditar), name='usuarioEditar'),
         path(r'^usuario/(?P<pk>[0-9]+)/delete/$', login_required(views.removeUsuario), name='removeUsuario'),
         path(r'^peticion/(?P<pk>[0-9]+)/edit/$', login_required(views.peticionEditar), name='peticionEditar'),
+        path(r'^peticion/list/$', login_required(views.peticionFiltrar), name='peticionFiltrar'),
         path(r'^usuario/(?P<destino>.+)/mail/$', login_required(views.post), name='post'),
 
 
