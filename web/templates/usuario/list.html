@@ -28,6 +28,12 @@
             text-align: center;
         }
 
+        .home{
+             left:5%;
+             top:5%;
+             position:fixed;
+         }
+
         .header {
             padding-top: 15px;
         }
@@ -119,15 +125,40 @@
         .boton{
             text-align:center;
         }
+
+        ul {
+    list-style-type: none;
+    padding:0;
+    overflow: hidden;
+    background : #0b4c46;
+
+    }
+
+    li {
+        float: left;
+        height:100%;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding:8px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: white;
+        color:#0b4c46;
+    }
          </style>
     </head>
 <body>
-
+          <a class="home" href="/" role="button"><img src="https://i.imgur.com/rQNSiWf.png" height="23%" width="23%"></a>
 
   <div class="container">
     <!-- SU CONTENIDO VA AQUÍ -->
     <div>
-          <a class="btn btn-primary" href="/" role="button">Volver</a>
           <a href="http://ardbud.pythonanywhere.com/web/index/usuario/edit"><img src="https://i.imgur.com/pUsbfby.jpg"></a>
       </div>
       <hr>
@@ -155,30 +186,29 @@
 {% endfor %}
 </table>
 
-  </div>
-
-  {% if items.has_next or items.has_previous %}
+{% if items.has_next or items.has_previous %}
 
 
     <ul class="pagination">
         {% if items.has_previous %}
-            <li><a href="?page={{ items.previous_page_number }}" class="btn btnpages"><i
-                    class="glyphicon glyphicon-chevron-left"></i></a></li>
+            <li><a href="?page={{ items.previous_page_number }}" class="pages"><i class="material-icons">keyboard_arrow_left</i></a></li>
         {% endif %}
         {% for page in items.paginator.page_range %}
             <li class="{% if items.number == page %}active{% endif %}">
-                <a class="btn btnpages" href="?page={{ page }}">{{ page }}</a></li>
+                <a class="pages" href="?page={{ page }}">{{ page }}</a></li>
         {% endfor %}
 
         {% if items.has_next %}
             <li>
-                <a href="?page={{ items.next_page_number }}" class="btn btnpages">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
+                <a href="?page={{ items.next_page_number }}" class="pages">
+                    <i class="material-icons">keyboard_arrow_right</i>
                 </a>
             </li>
         {% endif %}
     </ul>
     {% endif %}
+
+  </div>
 
   <!-- JavaScript: placed at the end of the document so the pages load faster -->
   <!-- jQuery library -->

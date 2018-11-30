@@ -14,12 +14,22 @@
          body{
               background-image: url("https://i.imgur.com/gbs74Xe.jpg");
               font-family: 'Playfair Display', serif;
+              -webkit-background-size: cover;
+              -moz-background-size: cover;
+              -o-background-size: cover;
+              background-size: cover;
          }
 
          label{
             display: block;
             margin: .5em 0 10px 0;
         }
+
+        .home{
+             left:5%;
+             top:5%;
+             position:fixed;
+         }
 
         .header {
             padding-top: 15px;
@@ -116,9 +126,8 @@
          </style>
        </head>
        <body>
+           <a class="home" href="/" role="button"><img src="https://i.imgur.com/rQNSiWf.png" height="23%" width="23%"></a>
      <div class="container">
-                         <a class="btn btn-primary" href="/" role="button">Volver</a>
-
 
      <div class="header">
      <h1>noticia</h1>
